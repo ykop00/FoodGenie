@@ -1,4 +1,4 @@
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 
 repositories {
     mavenCentral()
@@ -7,7 +7,7 @@ repositories {
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '19.1.0'
+    buildToolsVersion '20'
     defaultConfig {
         applicationId 'morozovs.foodgenie'
         minSdkVersion 14
@@ -28,9 +28,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:19.+'
+    compile 'com.android.support:support-v4:20.+'
     compile 'com.google.code.gson:gson:2.2.+'
-    compile ('com.fortysevendeg.swipelistview:swipelistview:1.0-SNAPSHOT@aar') {
-        transitive = true
-    }
+    compile 'com.mcxiaoke.volley:library:1.0.+'
 }
