@@ -4,6 +4,7 @@ import android.content.Context;
 
 import morozovs.foodgenie.api.FoodFinderAPI;
 import morozovs.foodgenie.models.MyPlaceInfo;
+import morozovs.foodgenie.utils.AppController;
 
 public class UpdatePlaceAsyncTask extends BasePlaceAsyncTask {
 
@@ -17,7 +18,7 @@ public class UpdatePlaceAsyncTask extends BasePlaceAsyncTask {
             return false;
 
         MyPlaceInfo p = params[0];
-        FoodFinderAPI.updateVisitedPlace(context, p);
+        AppController.getPlacesGetter().updateVisitedPlace(p);
         return true;
     }
 }

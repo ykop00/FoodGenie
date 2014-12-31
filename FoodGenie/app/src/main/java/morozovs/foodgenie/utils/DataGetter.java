@@ -1,83 +1,40 @@
 package morozovs.foodgenie.utils;
 
-import android.content.Context;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 
-import com.google.gson.JsonSyntaxException;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.net.ssl.HttpsURLConnection;
+import morozovs.foodgenie.interfaces.IPlacesGetterResponseHandler;
+import morozovs.foodgenie.interfaces.IResponseHandler;
+import morozovs.foodgenie.models.FGResponse;
 
-import morozovs.foodgenie.activities.HomeActivity;
-import morozovs.foodgenie.api.FoodFinderAPI;
-import morozovs.foodgenie.interfaces.IDataGetter;
+public class DataGetter implements Response.ErrorListener{
+    private static String tag_json_obj = "json_obj_req";
 
-public class DataGetter implements IDataGetter {
+    public void getData(String parameters, String baseUrl, Type returnObjectType, IResponseHandler callback, IPlacesGetterResponseHandler placesCallback){
 
-    public static final int TIMEOUT_MILLIES = 30000;
+        StringRequest strReq = new StringRequest(Request.Method.GET,
+                baseUrl + parameters, new FGResponse(callback, returnObjectType, placesCallback), this){
+//            @Override
+//            protected Map<String, String> getParams() {
+//                if(parameters == null)
+//                    return new HashMap<String, String>();
+//                return  parameters;
+//            }
+        };
+
+        AppController.getInstance().addToRequestQueue(strReq, tag_json_obj);
+    }
 
     @Override
-    public Object getData(String parameters, String urlString, Type returnObjectType, Context context){
-        FoodFinderAPI.toLog("urlString is", urlString);
-        FoodFinderAPI.toLog("params", parameters);
-
-        return _getData(urlString + parameters, returnObjectType);
-    }
-
-    private static Object _getData(String urlString, Type returnObjectType){
-        try {
-            HttpsURLConnection conn = setUpConnection(urlString);
-
-            conn.setDoOutput(true);
-            conn.setDoInput(true);
-            conn.setInstanceFollowRedirects(true);
-            conn.setConnectTimeout(TIMEOUT_MILLIES);
-            conn.setReadTimeout(TIMEOUT_MILLIES);
-
-            InputStreamReader is = new InputStreamReader(conn.getInputStream());
-            BufferedReader br = new BufferedReader(is);
-            StringBuilder sb = new StringBuilder();
-            String line;
-
-            while ((line = br.readLine()) != null) {
-                sb.append(line).append("\n");
-            }
-            br.close();
-
-            FoodFinderAPI.toLog("JSONObject returned:", sb.toString());
-
-            if(returnObjectType != null)
-                return JSONManager.getObject(sb.toString(), returnObjectType);
-            return sb.toString();
-
-        }catch (Exception e){
-            if(e instanceof SocketTimeoutException)
-                FoodFinderAPI.toLog("SocketTimeoutException occurred", Arrays.toString(e.getStackTrace()));
-            if(e instanceof FileNotFoundException)
-                FoodFinderAPI.toLog("FileNotFoundException occurred", Arrays.toString(e.getStackTrace()));
-            if(e instanceof IOException)
-                FoodFinderAPI.toLog("IOException occurred", Arrays.toString(e.getStackTrace()));
-            if(e instanceof JsonSyntaxException) {
-                FoodFinderAPI.toLog("JsonSyntaxException occurred", Arrays.toString(e.getStackTrace()));
-            }
-            FoodFinderAPI.toLog("Unknown exception occurred", Arrays.toString(e.getStackTrace()));
-        }
-        return null;
-    }
-
-    public static HttpsURLConnection setUpConnection(String urlString) throws IOException {
-
-        HttpsURLConnection connection;
-        connection = (HttpsURLConnection)new URL(urlString).openConnection();
-
-        return connection;
+    public void onErrorResponse(VolleyError error) {
+//        VolleyLog.d(TAG, "Error: " + error.getMessage());
+//        pDialog.hide();
     }
 
 }

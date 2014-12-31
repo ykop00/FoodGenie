@@ -10,7 +10,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
 import morozovs.foodgenie.R;
+import morozovs.foodgenie.api.FoodFinderAPI;
+import morozovs.foodgenie.utils.LocationHelper;
 
 public abstract class BaseActivity extends FragmentActivity {
 
@@ -39,12 +46,19 @@ public abstract class BaseActivity extends FragmentActivity {
         }
     }
 
-    public String getLocation() {
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        Location l = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        String formattedLat = l.getLatitude() + "," + l.getLongitude();
-        return formattedLat;
-    }
+//    public String getLocation() {
+//        if (mLastLocation != null)
+//            return mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
+//        else {
+//            reloadLocation();
+//            if (mLastLocation != null) {
+//                FoodFinderAPI.toLog("location not null!", "");
+//                return mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
+//            }
+//            return "";
+//        }
+//    }
+
 
     protected void startFragmentWithBackstack(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commitAllowingStateLoss();

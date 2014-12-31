@@ -1,10 +1,7 @@
 package morozovs.foodgenie.fragment;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +9,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import morozovs.foodgenie.R;
 import morozovs.foodgenie.activities.BaseActivity;
 import morozovs.foodgenie.adapters.ResultPlacesAdapter;
-import morozovs.foodgenie.interfaces.IResultSelectionManagement;
+import morozovs.foodgenie.interfaces.IResponseHandler;
+import morozovs.foodgenie.interfaces.IPlacesGetter;
 import morozovs.foodgenie.interfaces.IResultSelectionRefresh;
-import morozovs.foodgenie.loaders.GetSearchResultsLoader;
 import morozovs.foodgenie.models.MyPlaceInfo;
 import morozovs.foodgenie.models.SearchResult;
+import morozovs.foodgenie.utils.AppController;
+import morozovs.foodgenie.utils.PlacesGetter;
 
-public class ResultPlacesFragment extends BasePlacesFragment implements LoaderManager.LoaderCallbacks<SearchResult>, IResultSelectionRefresh {
-
-    static final int LOAD_PLACES = 0;
-
+public class ResultPlacesFragment extends BasePlacesFragment implements IResponseHandler, IResultSelectionRefresh {
     String searchParams;
     ListView listView;
     ResultPlacesAdapter resultPlaces;
@@ -40,6 +38,11 @@ public class ResultPlacesFragment extends BasePlacesFragment implements LoaderMa
     }
 
     @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+    }
+
+    @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
@@ -50,7 +53,7 @@ public class ResultPlacesFragment extends BasePlacesFragment implements LoaderMa
         listView = (ListView)getView().findViewById(android.R.id.list);
 
         if(resultPlaces == null)
-            getLoaderManager().restartLoader(LOAD_PLACES, null, this);
+            loadPlaces();
     }
 
     @Override
@@ -61,16 +64,50 @@ public class ResultPlacesFragment extends BasePlacesFragment implements LoaderMa
         return view;
     }
 
-    @Override
-    public Loader<SearchResult> onCreateLoader(int id, Bundle args) {
+    private void loadPlaces(){
         startLoadAnimation(getActivity());
-        if(id == LOAD_PLACES)
-            return new GetSearchResultsLoader(getActivity(), searchParams);
-        else return null;
+        AppController.getPlacesGetter().searchForPlaces(searchParams, this);
     }
 
+//    private Map<String, String> getParams(){
+//        return new HashMap<String, String>();
+//    }
+
+//    @Override
+//    public Loader<SearchResult> onCreateLoader(int id, Bundle args) {
+//        startLoadAnimation(getActivity());
+//        if(id == LOAD_PLACES)
+//            return new GetSearchResultsLoader(getActivity(), searchParams);
+//        else return null;
+//    }
+//
+//    @Override
+//    public void onLoadFinished(Loader<SearchResult> loader, SearchResult data) {
+//        resultPlaces = new ResultPlacesAdapter(getActivity(), data.results, resultSelectionManagement, extendedResultsGetter);
+//        if(data.results.isEmpty()){
+//            listView.setVisibility(View.GONE);
+//            noResults.setVisibility(View.VISIBLE);
+//        } else {
+//            listView.setVisibility(View.VISIBLE);
+//            noResults.setVisibility(View.GONE);
+//            listView.setAdapter(resultPlaces);
+//            getLoaderManager().destroyLoader(loader.getId());
+//        }
+//        stopLoadAnimation();
+//    }
+//
+//    @Override
+//    public void onLoaderReset(Loader<SearchResult> loader) {
+//
+//    }
+
     @Override
-    public void onLoadFinished(Loader<SearchResult> loader, SearchResult data) {
+    public void setSelection(ArrayList<MyPlaceInfo> selectedPlaces) {
+        if(listView != null)
+            listView.invalidateViews();
+    }
+
+    private void displayResults(SearchResult data){
         resultPlaces = new ResultPlacesAdapter(getActivity(), data.results, resultSelectionManagement, extendedResultsGetter);
         if(data.results.isEmpty()){
             listView.setVisibility(View.GONE);
@@ -79,19 +116,12 @@ public class ResultPlacesFragment extends BasePlacesFragment implements LoaderMa
             listView.setVisibility(View.VISIBLE);
             noResults.setVisibility(View.GONE);
             listView.setAdapter(resultPlaces);
-            getLoaderManager().destroyLoader(loader.getId());
         }
         stopLoadAnimation();
     }
 
     @Override
-    public void onLoaderReset(Loader<SearchResult> loader) {
-
-    }
-
-    @Override
-    public void setSelection(ArrayList<MyPlaceInfo> selectedPlaces) {
-        if(listView != null)
-            listView.invalidateViews();
+    public void onResponse(Object requestedData) {
+        displayResults((SearchResult)requestedData);
     }
 }

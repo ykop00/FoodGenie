@@ -21,8 +21,8 @@ public class FoodGenieDataSource {
             MySQLiteHelper.COLUMN_PLACE_NAME
     };
 
-    public FoodGenieDataSource(Context context) {
-        dbHelper = new MySQLiteHelper(context);
+    public FoodGenieDataSource() {
+        dbHelper = new MySQLiteHelper(AppController.getInstance());
     }
 
     public void open() throws SQLException {

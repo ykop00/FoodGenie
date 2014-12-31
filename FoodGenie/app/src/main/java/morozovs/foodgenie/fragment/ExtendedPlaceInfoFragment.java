@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,19 +18,20 @@ import java.util.Locale;
 
 import morozovs.foodgenie.R;
 import morozovs.foodgenie.adapters.ReviewAdapter;
-import morozovs.foodgenie.loaders.GetExtendedInfoLoader;
+import morozovs.foodgenie.api.FoodFinderAPI;
+import morozovs.foodgenie.interfaces.IResponseHandler;
 import morozovs.foodgenie.models.ExtendedPlaceInfo;
-import morozovs.foodgenie.models.ExtendedSearchResult;
 import morozovs.foodgenie.models.MyPlaceInfo;
 import morozovs.foodgenie.utils.StringUtils;
 
-public class ExtendedPlaceInfoFragment extends BaseFragment implements LoaderManager.LoaderCallbacks<ExtendedSearchResult> {
+public class ExtendedPlaceInfoFragment extends BaseFragment implements IResponseHandler {
 
     public static final String KEY_PLACE = "extended_info_place";
     private static final int LOADER_EXTENDED_INFO = 0;
 
     private static ExtendedPlaceInfo extendedPlaceInfo;
     private static MyPlaceInfo placeToLookUp;
+//    private static IPlacesGetter placesGetter;
 
     ViewGroup reviewLayout;
     TextView name;
@@ -51,6 +50,13 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements LoaderMan
 
         return f;
     }
+
+//    @Override
+//    public void onAttach(Activity activity){
+//        super.onAttach(activity);
+//
+//        placesGetter = new PlacesGetter(activity, this);
+//    }
 
     @Override
     public void onCreate(Bundle savedInstatnceState){
@@ -108,24 +114,9 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements LoaderMan
             placeToLookUp = MyPlaceInfo.fromJsonString(args.getString(KEY_PLACE));
         }
 
-        if(!StringUtils.isNullOrEmpty(placeToLookUp.getPlace_id()))
-            getLoaderManager().restartLoader(LOADER_EXTENDED_INFO, null, this);
-
-    }
-
-    @Override
-    public Loader<ExtendedSearchResult> onCreateLoader(int id, Bundle args) {
-        return new GetExtendedInfoLoader(getActivity(), placeToLookUp.place_id);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<ExtendedSearchResult> loader, ExtendedSearchResult data) {
-        displayInfo(data.result);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<ExtendedSearchResult> loader) {
-
+        if(!StringUtils.isNullOrEmpty(placeToLookUp.getPlace_id())){
+            getPlaceInfo();
+        }
     }
 
     @Override
@@ -145,7 +136,12 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements LoaderMan
         return super.onOptionsItemSelected(item);
     }
 
-    private void displayInfo(ExtendedPlaceInfo result){
+    private void getPlaceInfo(){
+        startLoadAnimation(getActivity());
+        FoodFinderAPI.getPlaceInfo(placeToLookUp.place_id, this);
+    }
+
+    private void displayPlaceInfo(ExtendedPlaceInfo result){
         extendedPlaceInfo = result;
 
         name.setText(result.getName());
@@ -155,5 +151,10 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements LoaderMan
         reviews.setAdapter(new ReviewAdapter(getActivity(), result.reviews));
 
         stopLoadAnimation();
+    }
+
+    @Override
+    public void onResponse(Object requestedData) {
+        displayPlaceInfo((ExtendedPlaceInfo) requestedData);
     }
 }

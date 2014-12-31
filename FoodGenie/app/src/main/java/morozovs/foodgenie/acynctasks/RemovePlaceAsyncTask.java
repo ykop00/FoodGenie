@@ -4,6 +4,7 @@ import android.content.Context;
 
 import morozovs.foodgenie.api.FoodFinderAPI;
 import morozovs.foodgenie.models.MyPlaceInfo;
+import morozovs.foodgenie.utils.AppController;
 
 public class RemovePlaceAsyncTask extends BasePlaceAsyncTask {
     public RemovePlaceAsyncTask(Context context){
@@ -16,7 +17,7 @@ public class RemovePlaceAsyncTask extends BasePlaceAsyncTask {
             return false;
 
         MyPlaceInfo p = params[0];
-        FoodFinderAPI.removeVisitedPlace(context, p.getPlace_id());
+        AppController.getPlacesGetter().removeVisitedPlace(p.getPlace_id());
         return true;
     }
 }

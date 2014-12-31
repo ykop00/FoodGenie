@@ -19,7 +19,6 @@ import morozovs.foodgenie.models.SearchParameters;
 public class SearchBuilderFragment extends BaseFragment {
 
     public SearchParameters searchParameters;
-    public String location;
     IHomeNavigationManager mNavigator;
 
     ViewGroup infoPriceRange;
@@ -39,9 +38,6 @@ public class SearchBuilderFragment extends BaseFragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         searchParameters = new SearchParameters();
-        if(getActivity() instanceof BaseActivity){
-            location = ((BaseActivity)getActivity()).getLocation();
-        }
 
     }
 
@@ -112,7 +108,6 @@ public class SearchBuilderFragment extends BaseFragment {
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                searchParameters.addParameter("location", location);
                 String params = searchParameters.buildSearchParams();
                 mNavigator.initiateSearch(params);
             }

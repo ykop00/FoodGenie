@@ -1,25 +1,23 @@
 package morozovs.foodgenie.api;
 
-import android.content.Context;
 import android.util.Log;
+import android.util.Pair;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import morozovs.foodgenie.interfaces.IPlacesGetterResponseHandler;
+import morozovs.foodgenie.interfaces.IResponseHandler;
 import morozovs.foodgenie.models.ExtendedSearchResult;
-import morozovs.foodgenie.models.MyPlaceInfo;
 import morozovs.foodgenie.models.SearchParameters;
 import morozovs.foodgenie.models.SearchResult;
 import morozovs.foodgenie.utils.DataGetter;
-import morozovs.foodgenie.utils.FoodGenieDataSource;
+import morozovs.foodgenie.utils.StringUtils;
 
 public class FoodFinderAPI {
     private static DataGetter dataGetter = new DataGetter();
-    private static FoodGenieDataSource dataSource = null;
     private static final String placeSearchUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
     private static final String placeDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?";
-
-    private static Context context;
-    public static ArrayList<MyPlaceInfo> myPlaces = null;
 
     public static void toLog(String tag, String message){
 
@@ -28,88 +26,22 @@ public class FoodFinderAPI {
         Log.i("", "\n**************  END  **************");
     }
 
-    public static SearchResult searchForPlaces(String params, Context context) {
-        if(myPlaces == null)
-            myPlaces = getMyVisitedPlaces(context);
-
-        SearchResult searchResult = (SearchResult)dataGetter.getData(params, placeSearchUrl, SearchResult.class, context);
-
-        if(!searchResult.validResults())
-            return new SearchResult();
-
-        ArrayList<MyPlaceInfo> temp = (ArrayList<MyPlaceInfo>)searchResult.results.clone();
-        for(MyPlaceInfo p : temp){
-            int indexOf = myPlaces.indexOf(p);
-            if(indexOf >= 0) {
-                MyPlaceInfo m = myPlaces.get(indexOf);
-                if(m.isBlacklisted)
-                    searchResult.results.remove(p);
-                else {
-                    p.setMyReview(m.getMyReview());
-                    p.setVisited(m.isVisited());
-                }
-            }
-        }
-
-        return searchResult;
+    public static void searchForPlaces(String params, IResponseHandler callback, IPlacesGetterResponseHandler placesCallback) {
+        dataGetter.getData(params, placeSearchUrl, SearchResult.class, callback, placesCallback);
     }
 
-    public static SearchResult getVisitedPlaces(Context context) {
-        return new SearchResult(getMyVisitedPlaces(context));
-    }
-
-    public static void saveVisitedPlace(Context context, MyPlaceInfo visitedPlace) {
-
-        //checking if we already visited a place
-        for(MyPlaceInfo p : myPlaces){
-            if(p.equals(visitedPlace))
-                return;
-        }
-
-        dataSource.saveMyPlaceInfo(visitedPlace);
-        myPlaces.add(visitedPlace);
-    }
-
-    public static void removeVisitedPlace(Context context, String placeId) {
-
-        dataSource.deleteMyPlaceInfo(placeId);
-        myPlaces = getMyVisitedPlaces(context);
-    }
-
-    public static void updateVisitedPlace(Context context, MyPlaceInfo visitedPlace) {
-        if(dataSource == null || getContext() != context)
-            dataSource = getDataSource(context);
-
-        dataSource.updateMyPlaceInfo(visitedPlace);
-        myPlaces = getMyVisitedPlaces(context);
-    }
-
-    public static ExtendedSearchResult getPlaceInfo(String placeId){
+    public static void getPlaceInfo(String placeId, IResponseHandler callback){
         String params = "placeid="+placeId+"&key="+ SearchParameters.APIKey;
-        ExtendedSearchResult result = (ExtendedSearchResult)dataGetter.getData(params, placeDetailsUrl, ExtendedSearchResult.class, context);
-        return result;
+        dataGetter.getData(params, placeDetailsUrl, ExtendedSearchResult.class, callback, null);
     }
 
-    private static ArrayList<MyPlaceInfo> getMyVisitedPlaces(Context context){
-        if(dataSource == null || getContext() != context)
-            dataSource = getDataSource(context);
-
-        ArrayList<MyPlaceInfo> myPlaceInfos = dataSource.getAllPlaces();
-        if(myPlaceInfos == null)
-            return new ArrayList<MyPlaceInfo>();
-        return myPlaceInfos;
-    }
-
-    private static FoodGenieDataSource getDataSource(Context context){
-        setContext(context);
-        return new FoodGenieDataSource(getContext());
-    }
-
-    private static void setContext(Context newContext){
-        context = newContext;
-    }
-
-    private static Context getContext(){
-        return context;
-    }
+//    private static Pair<String, String> getParam(String key, String value){
+//        if(StringUtils.isNullOrEmpty(key))
+//            try {
+//                throw new Exception("attempting to add a param with null key");
+//            } catch (Exception e) {
+//                toLog("NO GOOD", e.getMessage());
+//            }
+//        return new Pair<String, String>(key, value);
+//    }
 }
