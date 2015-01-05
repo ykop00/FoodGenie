@@ -36,19 +36,6 @@ public abstract class BaseActivity extends FragmentActivity {
         }
     }
 
-//    public String getLocation() {
-//        if (mLastLocation != null)
-//            return mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
-//        else {
-//            reloadLocation();
-//            if (mLastLocation != null) {
-//                FoodFinderAPI.toLog("location not null!", "");
-//                return mLastLocation.getLatitude() + "," + mLastLocation.getLongitude();
-//            }
-//            return "";
-//        }
-//    }
-
 
     protected void startFragmentWithBackstack(Fragment fragment){
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack(null).commitAllowingStateLoss();

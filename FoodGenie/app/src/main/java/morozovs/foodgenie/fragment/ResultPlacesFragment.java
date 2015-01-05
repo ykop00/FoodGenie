@@ -65,38 +65,6 @@ public class ResultPlacesFragment extends BasePlacesFragment implements IRespons
         AppController.getPlacesGetter().searchForPlaces(searchParams, this);
     }
 
-//    private Map<String, String> getParams(){
-//        return new HashMap<String, String>();
-//    }
-
-//    @Override
-//    public Loader<SearchResult> onCreateLoader(int id, Bundle args) {
-//        startLoadAnimation(getActivity());
-//        if(id == LOAD_PLACES)
-//            return new GetSearchResultsLoader(getActivity(), searchParams);
-//        else return null;
-//    }
-//
-//    @Override
-//    public void onLoadFinished(Loader<SearchResult> loader, SearchResult data) {
-//        resultPlaces = new ResultPlacesAdapter(getActivity(), data.results, resultSelectionManagement, extendedResultsGetter);
-//        if(data.results.isEmpty()){
-//            listView.setVisibility(View.GONE);
-//            noResults.setVisibility(View.VISIBLE);
-//        } else {
-//            listView.setVisibility(View.VISIBLE);
-//            noResults.setVisibility(View.GONE);
-//            listView.setAdapter(resultPlaces);
-//            getLoaderManager().destroyLoader(loader.getId());
-//        }
-//        stopLoadAnimation();
-//    }
-//
-//    @Override
-//    public void onLoaderReset(Loader<SearchResult> loader) {
-//
-//    }
-
     @Override
     public void setSelection(ArrayList<MyPlaceInfo> selectedPlaces) {
         if(listView != null)

@@ -52,13 +52,6 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements IResponse
         return f;
     }
 
-//    @Override
-//    public void onAttach(Activity activity){
-//        super.onAttach(activity);
-//
-//        placesGetter = new PlacesGetter(activity, this);
-//    }
-
     @Override
     public void onCreate(Bundle savedInstatnceState){
         super.onCreate(savedInstatnceState);
