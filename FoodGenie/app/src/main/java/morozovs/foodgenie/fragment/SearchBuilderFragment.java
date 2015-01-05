@@ -12,7 +12,6 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import morozovs.foodgenie.R;
-import morozovs.foodgenie.activities.BaseActivity;
 import morozovs.foodgenie.interfaces.IHomeNavigationManager;
 import morozovs.foodgenie.models.SearchParameters;
 

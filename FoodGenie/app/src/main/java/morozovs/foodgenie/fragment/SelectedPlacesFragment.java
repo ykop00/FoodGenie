@@ -1,7 +1,5 @@
 package morozovs.foodgenie.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,12 +13,8 @@ import java.util.ArrayList;
 
 import morozovs.foodgenie.R;
 import morozovs.foodgenie.adapters.ResultPlacesAdapter;
-import morozovs.foodgenie.interfaces.IExtendedResultsGetter;
-import morozovs.foodgenie.interfaces.IResultSelectionManagement;
 import morozovs.foodgenie.interfaces.IResultSelectionRefresh;
-import morozovs.foodgenie.models.BasePlace;
 import morozovs.foodgenie.models.MyPlaceInfo;
-import morozovs.foodgenie.utils.StringUtils;
 
 public class SelectedPlacesFragment extends BasePlacesFragment  implements IResultSelectionRefresh{
 

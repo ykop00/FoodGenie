@@ -1,9 +1,6 @@
 package morozovs.foodgenie.getters;
 
-import android.content.Context;
-
 import java.util.ArrayList;
-import java.util.Map;
 
 import morozovs.foodgenie.api.FoodFinderAPI;
 import morozovs.foodgenie.interfaces.IPlacesGetterResponseHandler;

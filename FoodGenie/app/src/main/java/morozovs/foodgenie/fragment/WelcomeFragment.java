@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 
 import morozovs.foodgenie.R;
-import morozovs.foodgenie.activities.HomeActivity;
 import morozovs.foodgenie.interfaces.IHomeNavigationManager;
 
 public class WelcomeFragment extends BaseFragment {

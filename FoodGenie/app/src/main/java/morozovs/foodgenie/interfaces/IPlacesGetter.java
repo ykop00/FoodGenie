@@ -1,9 +1,5 @@
 package morozovs.foodgenie.interfaces;
 
-import android.content.Context;
-
-import java.util.Map;
-
 import morozovs.foodgenie.models.MyPlaceInfo;
 import morozovs.foodgenie.models.SearchResult;
 
