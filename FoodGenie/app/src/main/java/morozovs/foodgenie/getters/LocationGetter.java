@@ -35,33 +35,44 @@ public class LocationGetter implements ILocationGetter, LocationListener, Google
     public void onLocationChanged(Location location) {
         if(location != null) {
             currentLocation = location;
-            if(locationRequested){
-                mLocationReceiver.gotLocation(currentLocation);
-                locationRequested = false;
-            }
+            returnLocation();
         }
     }
 
     @Override
     public void startAcquiringLocation(){
         locationRequested = true;
-        if(currentLocation != null)
-            returnLocation();
+
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if(location == null) {
+            apiClientConnect();
+        }
         else {
-            Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-            if(location == null) {
-                init();
-                mGoogleApiClient.connect();
-            }
-            else {
-                currentLocation = location;
-                returnLocation();
-            }
+            currentLocation = location;
+            returnLocation();
         }
     }
 
+    @Override
+    public void pauseLocationListening() {
+        apiClientDisconnect();
+    }
+
+    private void apiClientConnect(){
+        if(mGoogleApiClient == null) {
+            init();
+        }
+        mGoogleApiClient.connect();
+    }
+
+    private void apiClientDisconnect(){
+        if(mGoogleApiClient == null)
+            return;
+        mGoogleApiClient.disconnect();
+    }
+
     private static void returnLocation(){
-        if(locationRequested) {
+        if(locationRequested && currentLocation != null && mLocationReceiver != null) {
             locationRequested = false;
             mLocationReceiver.gotLocation(currentLocation);
         }
@@ -103,11 +114,11 @@ public class LocationGetter implements ILocationGetter, LocationListener, Google
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        returnLocation();
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
+        returnLocation();
     }
 }

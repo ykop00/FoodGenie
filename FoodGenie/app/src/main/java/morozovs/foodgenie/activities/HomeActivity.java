@@ -55,6 +55,12 @@ public class HomeActivity extends BaseActivity implements IHomeNavigationManager
         new GetVisitedPlaces().execute();
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        locationGetter.pauseLocationListening();
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -128,7 +134,7 @@ public class HomeActivity extends BaseActivity implements IHomeNavigationManager
         if(location != null)
             locationParam = location.getLatitude() + "," + location.getLongitude();
         else {
-            //display dialog saying location cant be retrieved
+            //TODO: handle user settings that may prevent app from acquiring location
             return;
         }
 
