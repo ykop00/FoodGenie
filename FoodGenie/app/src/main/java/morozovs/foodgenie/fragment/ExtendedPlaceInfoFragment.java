@@ -101,8 +101,6 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements IResponse
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
 
-        startLoadAnimation(getActivity());
-
         Bundle args = getArguments();
         if(args != null){
             placeToLookUp = MyPlaceInfo.fromJsonString(args.getString(KEY_PLACE));
@@ -141,8 +139,10 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements IResponse
         name.setText(extendedPlaceInfo.getName());
         price.setText(extendedPlaceInfo.getFormattedPrice());
         rating.setText(extendedPlaceInfo.getFormattedRating());
-        reviews = (ListView)getView().findViewById(android.R.id.list);
-        reviews.setAdapter(new ReviewAdapter(getActivity(), extendedPlaceInfo.reviews));
+        if(extendedPlaceInfo.reviews != null) {
+            reviews = (ListView) getView().findViewById(android.R.id.list);
+            reviews.setAdapter(new ReviewAdapter(getActivity(), extendedPlaceInfo.reviews));
+        }
 
         stopLoadAnimation();
     }

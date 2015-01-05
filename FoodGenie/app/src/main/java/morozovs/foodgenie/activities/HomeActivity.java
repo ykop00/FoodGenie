@@ -43,10 +43,13 @@ public class HomeActivity extends BaseActivity implements IHomeNavigationManager
         if(extras != null){
             if(extras.getString(KEY_FINAL_FRAGMENT, "").equals("true")){
                 loadFinalPlace(MyPlaceInfo.fromJsonString(extras.getString(FinalPlaceFragment.KEY_PLACE_PARAM, "")));
+                return;
             } else if(extras.getString(KEY_PLACE_INFO_FRAGMENT, "").equals("true")){
                 startFragmentFresh(ExtendedPlaceInfoFragment.newInstance((MyPlaceInfo.fromJsonString(extras.getString(ExtendedPlaceInfoFragment.KEY_PLACE, "")))));
+                return;
             }
-        }else loadWelcome();
+        }
+        loadWelcome();
     }
 
     @Override
