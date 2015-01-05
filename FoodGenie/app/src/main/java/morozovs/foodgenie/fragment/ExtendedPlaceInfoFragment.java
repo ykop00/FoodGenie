@@ -140,7 +140,6 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements IResponse
         price.setText(extendedPlaceInfo.getFormattedPrice());
         rating.setText(extendedPlaceInfo.getFormattedRating());
         if(extendedPlaceInfo.reviews != null) {
-            reviews = (ListView) getView().findViewById(android.R.id.list);
             reviews.setAdapter(new ReviewAdapter(getActivity(), extendedPlaceInfo.reviews));
         }
 
