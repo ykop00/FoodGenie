@@ -48,8 +48,7 @@ public class ResultPlacesFragment extends BasePlacesFragment implements IRespons
 
         listView = (ListView)getView().findViewById(android.R.id.list);
 
-        if(resultPlaces == null)
-            loadPlaces();
+        loadPlaces();
     }
 
     @Override
