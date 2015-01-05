@@ -1,8 +1,5 @@
 package morozovs.foodgenie.activities;
 
-import android.content.Context;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -10,14 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.MenuItem;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesClient;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-
 import morozovs.foodgenie.R;
-import morozovs.foodgenie.api.FoodFinderAPI;
-import morozovs.foodgenie.utils.LocationHelper;
 
 public abstract class BaseActivity extends FragmentActivity {
 

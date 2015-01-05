@@ -1,21 +1,17 @@
 package morozovs.foodgenie.api;
 
 import android.util.Log;
-import android.util.Pair;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import morozovs.foodgenie.interfaces.IDataGetter;
 import morozovs.foodgenie.interfaces.IPlacesGetterResponseHandler;
 import morozovs.foodgenie.interfaces.IResponseHandler;
 import morozovs.foodgenie.models.ExtendedSearchResult;
 import morozovs.foodgenie.models.SearchParameters;
 import morozovs.foodgenie.models.SearchResult;
-import morozovs.foodgenie.utils.DataGetter;
-import morozovs.foodgenie.utils.StringUtils;
+import morozovs.foodgenie.getters.DataGetter;
 
 public class FoodFinderAPI {
-    private static DataGetter dataGetter = new DataGetter();
+    private static IDataGetter dataGetter = new DataGetter();
     private static final String placeSearchUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?";
     private static final String placeDetailsUrl = "https://maps.googleapis.com/maps/api/place/details/json?";
 
@@ -34,14 +30,4 @@ public class FoodFinderAPI {
         String params = "placeid="+placeId+"&key="+ SearchParameters.APIKey;
         dataGetter.getData(params, placeDetailsUrl, ExtendedSearchResult.class, callback, null);
     }
-
-//    private static Pair<String, String> getParam(String key, String value){
-//        if(StringUtils.isNullOrEmpty(key))
-//            try {
-//                throw new Exception("attempting to add a param with null key");
-//            } catch (Exception e) {
-//                toLog("NO GOOD", e.getMessage());
-//            }
-//        return new Pair<String, String>(key, value);
-//    }
 }

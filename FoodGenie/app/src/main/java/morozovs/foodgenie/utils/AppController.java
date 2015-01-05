@@ -1,17 +1,14 @@
 package morozovs.foodgenie.utils;
 
 import android.app.Application;
-import android.location.Location;
-import android.location.LocationManager;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.location.LocationRequest;
 
-import morozovs.foodgenie.interfaces.ILocationReceiver;
+import morozovs.foodgenie.getters.PlacesGetter;
 import morozovs.foodgenie.interfaces.IPlacesGetter;
 
 public class AppController extends Application {

@@ -18,14 +18,14 @@ public abstract class BaseFragment extends Fragment {
 
     ProgressDialog progressDialog;
 
-    public void startLoadAnimation(Context context){
+    protected void startLoadAnimation(Context context){
         progressDialog = new ProgressDialog(context);
         progressDialog.setTitle("Genie working");
         progressDialog.setMessage("Your wish is my command!");
         progressDialog.show();
     }
 
-    public void stopLoadAnimation(){
+    protected void stopLoadAnimation(){
         if(progressDialog != null){
             progressDialog.dismiss();
             progressDialog = null;

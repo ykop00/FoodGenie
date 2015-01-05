@@ -1,4 +1,4 @@
-package morozovs.foodgenie.utils;
+package morozovs.foodgenie.getters;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -9,9 +9,11 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
+import morozovs.foodgenie.interfaces.ILocationGetter;
 import morozovs.foodgenie.interfaces.ILocationReceiver;
+import morozovs.foodgenie.utils.AppController;
 
-public class LocationHelper implements LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class LocationGetter implements ILocationGetter, LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     static Location currentLocation;
     static GoogleApiClient mGoogleApiClient;
@@ -19,7 +21,7 @@ public class LocationHelper implements LocationListener, GoogleApiClient.Connect
     static ILocationReceiver mLocationReceiver;
     static boolean locationRequested;
 
-    public LocationHelper(ILocationReceiver callback){
+    public LocationGetter(ILocationReceiver callback){
         mLocationReceiver = callback;
         init();
     }
@@ -40,6 +42,7 @@ public class LocationHelper implements LocationListener, GoogleApiClient.Connect
         }
     }
 
+    @Override
     public void startAcquiringLocation(){
         locationRequested = true;
         if(currentLocation != null)

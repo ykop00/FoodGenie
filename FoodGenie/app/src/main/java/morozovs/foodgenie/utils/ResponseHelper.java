@@ -1,4 +1,4 @@
-package morozovs.foodgenie.models;
+package morozovs.foodgenie.utils;
 
 import com.android.volley.Response;
 
@@ -8,13 +8,13 @@ import morozovs.foodgenie.interfaces.IPlacesGetterResponseHandler;
 import morozovs.foodgenie.interfaces.IResponseHandler;
 import morozovs.foodgenie.utils.JSONManager;
 
-public class FGResponse implements Response.Listener<String> {
+public class ResponseHelper implements Response.Listener<String> {
 
     private Type objectReturnType;
     private IResponseHandler callback;
     private IPlacesGetterResponseHandler placesHandlerCallback;
 
-    public FGResponse(IResponseHandler callback, Type objectReturnType, IPlacesGetterResponseHandler placesHandlerCallback){
+    public ResponseHelper(IResponseHandler callback, Type objectReturnType, IPlacesGetterResponseHandler placesHandlerCallback){
         this.callback = callback;
         this.objectReturnType = objectReturnType;
         this.placesHandlerCallback = placesHandlerCallback;

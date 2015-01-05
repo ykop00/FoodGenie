@@ -9,19 +9,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import morozovs.foodgenie.R;
 import morozovs.foodgenie.activities.BaseActivity;
 import morozovs.foodgenie.adapters.ResultPlacesAdapter;
 import morozovs.foodgenie.interfaces.IResponseHandler;
-import morozovs.foodgenie.interfaces.IPlacesGetter;
 import morozovs.foodgenie.interfaces.IResultSelectionRefresh;
 import morozovs.foodgenie.models.MyPlaceInfo;
 import morozovs.foodgenie.models.SearchResult;
 import morozovs.foodgenie.utils.AppController;
-import morozovs.foodgenie.utils.PlacesGetter;
 
 public class ResultPlacesFragment extends BasePlacesFragment implements IResponseHandler, IResultSelectionRefresh {
     String searchParams;

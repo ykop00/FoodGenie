@@ -1,18 +1,14 @@
 package morozovs.foodgenie.activities;
 
-import android.app.ActionBar;
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import java.util.ArrayList;
 
 import morozovs.foodgenie.R;
-import morozovs.foodgenie.api.FoodFinderAPI;
 import morozovs.foodgenie.fragment.ExtendedPlaceInfoFragment;
 import morozovs.foodgenie.fragment.FinalPlaceFragment;
 import morozovs.foodgenie.fragment.SearchBuilderFragment;
@@ -20,21 +16,20 @@ import morozovs.foodgenie.fragment.SelectedPlacesFragment;
 import morozovs.foodgenie.fragment.WelcomeFragment;
 import morozovs.foodgenie.interfaces.IExtendedResultsGetter;
 import morozovs.foodgenie.interfaces.IHomeNavigationManager;
+import morozovs.foodgenie.interfaces.ILocationGetter;
 import morozovs.foodgenie.interfaces.ILocationReceiver;
 import morozovs.foodgenie.interfaces.IResultSelectionManagement;
-import morozovs.foodgenie.models.ExtendedPlaceInfo;
 import morozovs.foodgenie.models.MyPlaceInfo;
 import morozovs.foodgenie.models.SearchParameters;
 import morozovs.foodgenie.models.SearchResult;
 import morozovs.foodgenie.utils.AppController;
-import morozovs.foodgenie.utils.LocationHelper;
-import morozovs.foodgenie.utils.PlacesGetter;
+import morozovs.foodgenie.getters.LocationGetter;
 import morozovs.foodgenie.utils.StringUtils;
 
 public class HomeActivity extends BaseActivity implements IHomeNavigationManager, IResultSelectionManagement, IExtendedResultsGetter, ILocationReceiver {
 
     private static ArrayList<MyPlaceInfo> visitedPlaces;
-    private static LocationHelper locationHelper;
+    private static ILocationGetter locationGetter;
     private String params;
 
     @Override
@@ -42,7 +37,7 @@ public class HomeActivity extends BaseActivity implements IHomeNavigationManager
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        locationHelper = new LocationHelper(this);
+        locationGetter = new LocationGetter(this);
 
         Bundle extras = getIntent().getExtras();
         if(extras != null){
@@ -96,12 +91,12 @@ public class HomeActivity extends BaseActivity implements IHomeNavigationManager
     @Override
     public void initiateSearch(String searchParams) {
         params = searchParams;
-        locationHelper.startAcquiringLocation();
+        initiateSuggestionSearch();
     }
 
     @Override
     public void initiateSuggestionSearch() {
-        locationHelper.startAcquiringLocation();
+        locationGetter.startAcquiringLocation();
     }
 
     private void showResults(){
@@ -140,7 +135,7 @@ public class HomeActivity extends BaseActivity implements IHomeNavigationManager
         if(StringUtils.isNullOrEmpty(params)) {
             SearchParameters paramsBuilder = new SearchParameters();
             params = paramsBuilder.getSuggestionParams(locationParam);
-        } else params += locationParam;
+        } else params += "&location=" + locationParam;
 
         showResults();
     }

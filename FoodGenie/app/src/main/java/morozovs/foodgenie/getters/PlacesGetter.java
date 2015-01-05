@@ -1,4 +1,4 @@
-package morozovs.foodgenie.utils;
+package morozovs.foodgenie.getters;
 
 import android.content.Context;
 
@@ -11,6 +11,7 @@ import morozovs.foodgenie.interfaces.IResponseHandler;
 import morozovs.foodgenie.interfaces.IPlacesGetter;
 import morozovs.foodgenie.models.MyPlaceInfo;
 import morozovs.foodgenie.models.SearchResult;
+import morozovs.foodgenie.utils.FoodGenieDataSource;
 
 public class PlacesGetter implements IPlacesGetterResponseHandler, IPlacesGetter {
 

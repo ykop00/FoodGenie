@@ -21,6 +21,7 @@ import morozovs.foodgenie.adapters.ReviewAdapter;
 import morozovs.foodgenie.api.FoodFinderAPI;
 import morozovs.foodgenie.interfaces.IResponseHandler;
 import morozovs.foodgenie.models.ExtendedPlaceInfo;
+import morozovs.foodgenie.models.ExtendedSearchResult;
 import morozovs.foodgenie.models.MyPlaceInfo;
 import morozovs.foodgenie.utils.StringUtils;
 
@@ -141,20 +142,20 @@ public class ExtendedPlaceInfoFragment extends BaseFragment implements IResponse
         FoodFinderAPI.getPlaceInfo(placeToLookUp.place_id, this);
     }
 
-    private void displayPlaceInfo(ExtendedPlaceInfo result){
-        extendedPlaceInfo = result;
+    private void displayPlaceInfo(ExtendedSearchResult result){
+        extendedPlaceInfo = result.result;
 
-        name.setText(result.getName());
-        price.setText(result.getFormattedPrice());
-        rating.setText(result.getFormattedRating());
+        name.setText(extendedPlaceInfo.getName());
+        price.setText(extendedPlaceInfo.getFormattedPrice());
+        rating.setText(extendedPlaceInfo.getFormattedRating());
         reviews = (ListView)getView().findViewById(android.R.id.list);
-        reviews.setAdapter(new ReviewAdapter(getActivity(), result.reviews));
+        reviews.setAdapter(new ReviewAdapter(getActivity(), extendedPlaceInfo.reviews));
 
         stopLoadAnimation();
     }
 
     @Override
     public void onResponse(Object requestedData) {
-        displayPlaceInfo((ExtendedPlaceInfo) requestedData);
+        displayPlaceInfo((ExtendedSearchResult) requestedData);
     }
 }
